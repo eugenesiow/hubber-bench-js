@@ -21,7 +21,6 @@ fs.readFile('ca-GrQc-ps.json', 'utf8', function (err,data) {
 
   subscriptionBench();
   setTimeout(finish,Number(time)*1000);
-
 });
 
 function subscriptionBench() {

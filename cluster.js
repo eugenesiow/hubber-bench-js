@@ -1,21 +1,32 @@
 var cluster = require( 'cluster' );
 var numCPUs = require( 'os' ).cpus().length;
+var fs = require('fs');
 
-var totalClients = 0;
-console.log(numCPUs);
+var clientsToCreate = process.argv[2];
+var totalClients = process.argv[3];
+var perCore = Math.round(clientsToCreate / numCPUs);
+var clientData = {};
+console.log(perCore + " clients per core");
 
 if( cluster.isMaster ) {
 	for( var i = 0; i < numCPUs; i++ ) {
-		setTimeout( startDeepstreamClientBatchProcess.bind( null, 250 ), 100 );
+		setTimeout( startDeepstreamClientBatchProcess.bind( null,  perCore), 1000 );
 	}
 
 	cluster.on( 'exit', onDeepstreamClientExited );
-	// cluster.on( 'online', onDeepstreamClientStarted );
+	// cluster.on( 'online', onDeepstreamClientStarted );	
 } else {
-	var processID = Number( process.env.firstClientID );
-	for( var i = 0; i < process.env.clientAmount; i++ ) {
-		setTimeout( startDeepstreamClient(processID+i), 100 );
-	}
+	fs.readFile('ca-GrQc-ps.json', 'utf8', function (err,data) {
+		if (err) {
+			return console.log(err);
+		}
+		clientData = JSON.parse(data);
+
+		var processID = Number( process.env.firstClientID );
+		for( var i = 0; i < process.env.clientAmount; i++ ) {
+			setTimeout( startDeepstreamClient(processID+i,clientData[processID+i]), 100 );
+		}
+	});
 }
 
 function startDeepstreamClientBatchProcess( clientAmount ) {
@@ -23,13 +34,13 @@ function startDeepstreamClientBatchProcess( clientAmount ) {
 		clientAmount: clientAmount,
 		firstClientID: totalClients
 	} );
-	totalClients = totalClients + clientAmount;
+	totalClients = Number(totalClients + clientAmount);
 }
 
-function startDeepstreamClient( clientID ) {
+function startDeepstreamClient( clientID, subscribers ) {
 	return function() {
-		console.log( 'Starting client pair:', clientID );
-		require( './client' )( clientID);
+		console.log( 'Starting client pair:' + clientID + ' with subscribers: ' + subscribers);
+		require( './client' )( clientID, subscribers);
 	}
 }
 
