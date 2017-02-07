@@ -6,7 +6,7 @@ console.log(numCPUs);
 
 if( cluster.isMaster ) {
 	for( var i = 0; i < numCPUs; i++ ) {
-		setTimeout( startDeepstreamClientBatchProcess.bind( null, 1 ), 10000 );
+		setTimeout( startDeepstreamClientBatchProcess.bind( null, 250 ), 100 );
 	}
 
 	cluster.on( 'exit', onDeepstreamClientExited );
@@ -14,7 +14,7 @@ if( cluster.isMaster ) {
 } else {
 	var processID = Number( process.env.firstClientID );
 	for( var i = 0; i < process.env.clientAmount; i++ ) {
-		setTimeout( startDeepstreamClient(processID+i), 10000 );
+		setTimeout( startDeepstreamClient(processID+i), 100 );
 	}
 }
 
