@@ -4,6 +4,7 @@ var fs = require('fs');
 
 var clientsToCreate = process.argv[2];
 var totalClients = process.argv[3];
+var fileName = process.argv[4];
 var perCore = Math.round(clientsToCreate / numCPUs);
 var clientData = {};
 console.log(perCore + " clients per core");
@@ -16,7 +17,7 @@ if( cluster.isMaster ) {
 	cluster.on( 'exit', onDeepstreamClientExited );
 	// cluster.on( 'online', onDeepstreamClientStarted );	
 } else {
-	fs.readFile('ca-GrQc-ps.json', 'utf8', function (err,data) {
+	fs.readFile(fileName, 'utf8', function (err,data) {
 		if (err) {
 			return console.log(err);
 		}

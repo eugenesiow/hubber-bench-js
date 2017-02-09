@@ -9,11 +9,12 @@ const client = ds.login();
 
 var clientId = process.argv[2];
 var time = process.argv[3];
+var fileName = process.argv[4];
 var map = {};
 var log_file = fs.createWriteStream(__dirname + '/results/'+clientId+'.log', {flags : 'w'});
 
 console.log(clientId);
-fs.readFile('ca-GrQc-ps.json', 'utf8', function (err,data) {
+fs.readFile(fileName, 'utf8', function (err,data) {
   if (err) {
     return console.log(err);
   }

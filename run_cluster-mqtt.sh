@@ -1,0 +1,1 @@
+node cluster-mqtt.js 5410 0 ca-GrQc-ps.json
