@@ -1,0 +1,1 @@
+./run-benchmark-smart.sh 0 1000 180
