@@ -19,19 +19,8 @@ client.on('error', (error) => {
 })
 
 function subscriptionBench() {
-	fs.readFile(fileName, 'utf8', function (err,data) {
-	  if (err) {
-	    return console.log(err);
-	  }
-	  map = JSON.parse(data);
-	  friends = map[clientId];
-
-	  for(var i in friends) {
-			client.subscribe('test/test'+friends[i]);
-		}
-
-	  setTimeout(finish,Number(time)*1000);
-	});	
+	client.subscribe('test/test'+clientId);
+	setTimeout(finish,Number(time)*1000);
 }
 
 client.on('message', (topic, message) => {  

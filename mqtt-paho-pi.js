@@ -1,6 +1,6 @@
 var fs = require('fs');
-const mqtt = require('mqtt')  
-const client = mqtt.connect('mqtt://192.168.0.100:1883')  
+const mqtt = require('paho-mqtt')  
+const client = new mqtt.MQTT.Client('192.168.0.100', 1883)
 
 var clientId = process.argv[2];
 var time = process.argv[3];
@@ -10,13 +10,11 @@ var map = {};
 var log_file = fs.createWriteStream(__dirname + '/results_'+ext+'_mqtt/'+clientId+'.log', {flags : 'w'});
 
 console.log(clientId);
-client.on('connect', () => {
-  	subscriptionBench();
-});
 
-client.on('error', (error) => {
-	console.log(error);
-})
+// set callback handlers
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+client.connect({onSuccess:subscriptionBench});
 
 function subscriptionBench() {
 	fs.readFile(fileName, 'utf8', function (err,data) {
@@ -34,12 +32,20 @@ function subscriptionBench() {
 	});	
 }
 
-client.on('message', (topic, message) => {  
-	var d = new Date();
+// called when a message arrives
+function onMessageArrived(message) {
+  	var d = new Date();
 	var arr = message.toString().split(",");
 	var diff = d.getTime() - Number(arr[0]);
 	log_file.write(diff+'\n');
-})
+}
+
+// called when the client loses its connection
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0) {
+    console.log("onConnectionLost:"+responseObject.errorMessage);
+  }
+}
 
 function finish() {
 	client.end();

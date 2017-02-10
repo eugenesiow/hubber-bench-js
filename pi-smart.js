@@ -9,7 +9,8 @@ const client = ds.login();
 
 var clientId = process.argv[2];
 var time = process.argv[3];
-var log_file = fs.createWriteStream(__dirname + '/results/'+clientId+'.log', {flags : 'w'});
+var extension = process.argv[4];
+var log_file = fs.createWriteStream(__dirname + '/results_'+extension+'/'+clientId+'.log', {flags : 'w'});
 
 console.log(clientId);
 subscriptionBench();
