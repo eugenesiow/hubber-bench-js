@@ -35,7 +35,7 @@ function startDeepstreamClientBatchProcess( clientAmount ) {
 		clientAmount: clientAmount,
 		firstClientID: totalClients
 	} );
-	totalClients = Number(totalClients + clientAmount);
+	totalClients = Number(totalClients) + Number(clientAmount);
 }
 
 function startDeepstreamClient( clientID, subscribers ) {

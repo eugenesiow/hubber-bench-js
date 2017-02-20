@@ -1,1 +1,1 @@
-./run-benchmark-smart.sh 0 1000 180
+./run-benchmark-smart.sh 2500 3500 $1 $2
