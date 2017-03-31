@@ -16,3 +16,4 @@ Any dataset of the right graph format is supported but we use 2 datasets from Le
 
 ### This Project
 * [Hubber Bench (Java Part)](https://github.com/eugenesiow/hubber-bench)
+* [Hubber Frontend Boilerplate](https://github.com/eugenesiow/hubber-bp)
